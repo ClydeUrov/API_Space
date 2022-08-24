@@ -9,5 +9,7 @@ tg_chat_id = os.getenv("TG_CHAT_ID")
 bot = telegram.Bot(token=tg_token)
 print(bot.get_me())
 
-bot.send_message(chat_id=tg_chat_id, text="I'm sorry Dave I'm afraid I can't do that.")
+bot.send_document(chat_id=TG_CHAT_ID, document=open('images/nasa_apod_12', 'rb'))
 
+# updates = bot.get_updates()
+# print([u.message.photo for u in updates if u.message.photo])
