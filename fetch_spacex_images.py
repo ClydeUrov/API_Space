@@ -11,7 +11,9 @@ def download_image(url, filename):
 
 
 def fetch_spacex_last_launch():
-    response = requests.get('https://api.spacexdata.com/v5/launches/5eb87d47ffd86e000604b38a')
+    response = requests.get(
+        'https://api.spacexdata.com/v5/launches/5eb87d47ffd86e000604b38a'
+    )
     res = response.json()
     spacex_links = (res['links']['flickr']['original'])
     

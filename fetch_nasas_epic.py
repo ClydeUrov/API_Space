@@ -4,10 +4,6 @@ from pathlib import Path
 from os.path import splitext
 from dotenv import load_dotenv
 
-token = os.getenv("TOKEN")
-
-Path("images").mkdir(parents=True, exist_ok=True)
-token = "mlafKIH1LG1N5BxRlz4lY1OWaEelQVgIvpVkygBB"
 
 def download_image(url, filename):
     response = requests.get(url)
