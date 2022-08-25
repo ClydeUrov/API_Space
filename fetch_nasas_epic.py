@@ -8,16 +8,15 @@ from dotenv import load_dotenv
 def download_image(url, filename):
     response = requests.get(url)
     response.raise_for_status()
-
     with open(filename, 'wb') as file:
         file.write(response.content)
 
 
 def fetch_nasa_epic(token):
-    date = {'api_key': token}
+    params = {'api_key': token}
     response = requests.get(
-      f'https://api.nasa.gov/EPIC/api/natural/images',
-      params=date
+      'https://api.nasa.gov/EPIC/api/natural/images',
+      params=params
     )
     all_epic = response.json()
     epics_url = []
@@ -29,7 +28,7 @@ def fetch_nasa_epic(token):
            
         response = requests.get(
           f'https://api.nasa.gov/EPIC/archive/natural/{splited_epic[0]}/{splited_epic[1]}/{splited_epic[2]}/png/{epic_name}.png',
-          params=date
+          params=params
         )
         epics_url.append(response.url)
     
