@@ -21,18 +21,17 @@ def image_expansion(url):
 
 
 def fetch_nasas_images(token):
-    params = {'api_key': token, 'start_date': '2022-07-18'}
+    params = {'api_key': token, 'start_date': '2022-08-01'}
     response = requests.get(
         'https://api.nasa.gov/planetary/apod',
          params=params
     )
+    response.raise_for_status()
     nasa_images = response.json()
-    
-    for image in nasa_images:
-        for nasa_apod_number, image in enumerate(nasa_images):
-            format_url = image_expansion(image['url'])
-            filename = 'images/nasa_apod_{}{}'.format(nasa_apod_number, format_url)
-            download_image(image['url'], filename) 
+    for nasa_apod_number, image in enumerate(nasa_images):
+        format_url = image_expansion(image['url'])
+        filename = f'images/nasa_apod_{nasa_apod_number}{format_url}'
+        download_image(image['url'], filename) 
 
 
 if __name__ == '__main__':
