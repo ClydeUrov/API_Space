@@ -19,7 +19,6 @@ def publication_photo(all_images):
 if __name__ == "__main__":
 	load_dotenv()
 	tg_token = os.getenv("TG_TOKEN")
-	tg_chat_id = os.getenv("TG_CHAT_ID")
 	bot = telegram.Bot(token=tg_token)
 	channel_name = '@devman_space_images'
 	parser = argparse.ArgumentParser(
@@ -33,7 +32,8 @@ if __name__ == "__main__":
 		type=int
 	)
 	args = parser.parse_args()
-	
+	all_images = [image for image in os.walk("images")][0][2]
+	publication_photo(all_images)
 	while True:
 		all_images = [image for image in os.walk("images")][0][2]
 		random.shuffle(all_images)
@@ -41,5 +41,3 @@ if __name__ == "__main__":
 		exec(open("fetch_spacex_images.py").read())
 		exec(open("fetch_nasas_images.py").read())
 		exec(open("fetch_nasas_epic.py").read())
-	
-	
