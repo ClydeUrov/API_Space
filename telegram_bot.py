@@ -10,7 +10,7 @@ import requests
 def publication_photo(all_images):
 	for image in all_images:
 		bot.send_document(
-			chat_id=tg_chat_id, 
+			channel_name, 
 			document=open(f'images/{image}', 'rb')
 		)
 		time.sleep(args.delay_time)
@@ -21,6 +21,7 @@ if __name__ == "__main__":
 	tg_token = os.getenv("TG_TOKEN")
 	tg_chat_id = os.getenv("TG_CHAT_ID")
 	bot = telegram.Bot(token=tg_token)
+	channel_name = '@devman_space_images'
 	parser = argparse.ArgumentParser(
 		description="Размещает фото на телеграмм канал"
 	)
