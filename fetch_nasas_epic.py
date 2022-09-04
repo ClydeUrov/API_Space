@@ -1,8 +1,10 @@
 import os
 import requests
 from pathlib import Path
-from os.path import splitext
 from dotenv import load_dotenv
+from datetime import datetime
+import download_space_image
+import argparse
 
 
 def download_image(url, filename):
@@ -14,31 +16,36 @@ def download_image(url, filename):
 
 def fetch_nasa_epic(token):
     params = {'api_key': token}
-    response = requests.get(
+    epic_response = requests.get(
       'https://api.nasa.gov/EPIC/api/natural/images',
       params=params
     )
-    all_epic = response.json()
     epics_url = []
-    
-    for number in range(0, 5):
-        epic_name = all_epic[number]['image']
-        splited_epic = all_epic[number]['date'].split(' ')
-        splited_epic = splited_epic[0].split('-')
-           
+    for number in range(0, args.photos_number):
+        epic_name = epic_response.json()[number]['image']
+        epic_time = datetime.fromisoformat(epic_response.json()[number]['date'])
         response = requests.get(
-          f'https://api.nasa.gov/EPIC/archive/natural/{splited_epic[0]}/{splited_epic[1]}/{splited_epic[2]}/png/{epic_name}.png',
+          f'https://api.nasa.gov/EPIC/archive/natural/{epic_time.year}/{epic_time.strftime("%m")}/{epic_time.strftime("%d")}/png/{epic_name}.png',
           params=params
         )
+        response.raise_for_status()
         epics_url.append(response.url)
-    
-        for nasa_epic_number, epic in enumerate(epics_url):
-            filename = 'images/nasa_epic_{}.png'.format(nasa_epic_number)
-            download_image(epic, filename)
-
+    for nasa_epic_number, epic in enumerate(epics_url):
+        filename = os.path.join('images', f'nasa_epic_{nasa_epic_number}.png')
+        download_space_image.download_image(epic, filename)
+        
 
 if __name__ == '__main__':
     load_dotenv()
-    nasa_token = os.getenv("NASA_TOKEN")
+    parser = argparse.ArgumentParser(description="Выгружает картинки NASA EPIC.")
+    parser.add_argument(
+        '-d',
+        dest='photos_number',
+        help='Колличество скачиваемых фотографий NASA EPIC.',
+        default='5',
+        type=int
+    )
+    args = parser.parse_args()
+    nasa_token = os.environ.get('NASA_TOKEN')
     Path("images").mkdir(parents=True, exist_ok=True)
     fetch_nasa_epic(nasa_token)
