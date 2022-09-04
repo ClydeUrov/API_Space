@@ -1,26 +1,36 @@
-import telegram
 import os
+import telegram
 from dotenv import load_dotenv
 import random
 import argparse
 import time
 import requests
 
-
+ 
 def publication_photo(all_images):
 	for image in all_images:
-		bot.send_document(
-			channel_name, 
-			document=open(f'images/{image}', 'rb')
-		)
+		with open(os.path.join('images', f'{image}'), 'rb') as file:
+			bot.send_document(
+				chat_id=tg_chat_id,
+				document=file
+			)
+			file.close()
 		time.sleep(args.delay_time)
+
+
+def main():
+	all_images = [image for image in os.walk("images")][0][2]
+	publication_photo(all_images)
+	while True:
+		random.shuffle(all_images)
+		publication_photo(all_images)
 
 
 if __name__ == "__main__":
 	load_dotenv()
-	tg_token = os.getenv("TG_TOKEN")
+	tg_token = os.environ.get("TG_TOKEN")
+	tg_chat_id = os.environ.get("TG_CHAT_ID")
 	bot = telegram.Bot(token=tg_token)
-	channel_name = '@devman_space_images'
 	parser = argparse.ArgumentParser(
 		description="Размещает фото на телеграмм канал"
 	)
@@ -32,12 +42,10 @@ if __name__ == "__main__":
 		type=int
 	)
 	args = parser.parse_args()
-	all_images = [image for image in os.walk("images")][0][2]
-	publication_photo(all_images)
-	while True:
-		all_images = [image for image in os.walk("images")][0][2]
-		random.shuffle(all_images)
-		publication_photo(all_images)
-		exec(open("fetch_spacex_images.py").read())
-		exec(open("fetch_nasas_images.py").read())
-		exec(open("fetch_nasas_epic.py").read())
+	try:
+		main()
+	except requests.ConnectionError:
+		main()
+	except telegram.error.NetworkError:
+		main()
+		
