@@ -11,7 +11,7 @@ def publication_photo(all_images):
 	for image in all_images:
 		with open(os.path.join('images', f'{image}'), 'rb') as file:
 			bot.send_document(
-				chat_id=tg_chat_id,
+				chat_id=os.environ.get("TG_CHAT_ID"),
 				document=file
 			)
 			file.close()
@@ -20,17 +20,23 @@ def publication_photo(all_images):
 
 def main():
 	all_images = [image for image in os.walk("images")][0][2]
-	publication_photo(all_images)
 	while True:
-		random.shuffle(all_images)
-		publication_photo(all_images)
+		try:
+			publication_photo(all_images)
+			random.shuffle(all_images)
+		except telegram.error.NetworkError:
+			time.sleep(10)
+			main()
+		except requests.ConnectionError:
+			time.sleep(10)
+			main()
 
 
 if __name__ == "__main__":
 	load_dotenv()
-	tg_token = os.environ.get("TG_TOKEN")
-	tg_chat_id = os.environ.get("TG_CHAT_ID")
-	bot = telegram.Bot(token=tg_token)
+	os.environ['TG_TOKEN'] = str(input('Введите ваш TG_TOKEN: '))
+	os.environ['TG_CHAT_ID'] = str(input('Введите ваш TG_CHAT_ID: '))
+	bot = telegram.Bot(token=os.environ.get("TG_TOKEN"))
 	parser = argparse.ArgumentParser(
 		description="Размещает фото на телеграмм канал"
 	)
@@ -42,10 +48,6 @@ if __name__ == "__main__":
 		type=int
 	)
 	args = parser.parse_args()
-	try:
-		main()
-	except requests.ConnectionError:
-		main()
-	except telegram.error.NetworkError:
-		main()
+	main()
+
 		
