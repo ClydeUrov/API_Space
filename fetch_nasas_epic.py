@@ -7,13 +7,6 @@ import download_space_image
 import argparse
 
 
-def download_image(url, filename):
-    response = requests.get(url)
-    response.raise_for_status()
-    with open(filename, 'wb') as file:
-        file.write(response.content)
-
-
 def fetch_nasa_epic(token):
     params = {'api_key': token}
     epic_response = requests.get(
@@ -21,7 +14,7 @@ def fetch_nasa_epic(token):
       params=params
     )
     epics_url = []
-    for number in range(0, args.photos_number):
+    for number in range(0, photos_number()):
         epic_name = epic_response.json()[number]['image']
         epic_time = datetime.fromisoformat(epic_response.json()[number]['date'])
         response = requests.get(
@@ -45,7 +38,7 @@ if __name__ == '__main__':
         default='5',
         type=int
     )
-    args = parser.parse_args()
-    nasa_token = os.environ.get('NASA_TOKEN')
+    photos_number = lambda: parser.parse_args().photos_number
+    os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
     Path("images").mkdir(parents=True, exist_ok=True)
-    fetch_nasa_epic(nasa_token)
+    fetch_nasa_epic(os.environ.get('NASA_TOKEN'))
