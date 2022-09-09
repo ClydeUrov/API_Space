@@ -7,13 +7,12 @@ import argparse
 
 def fetch_spacex_last_launch():
     response = requests.get(
-        f'https://api.spacexdata.com/v5/launches/{args.launch_id}'
+        f'https://api.spacexdata.com/v5/launches/{launch_id()}'
     )
-    if not response.json()['links']['flickr']['original']: response = requests.get(
-        'https://api.spacexdata.com/v5/launches/5eb87d42ffd86e000604b384'
-    ) 
     response.raise_for_status()
     spacex_links = (response.json()['links']['flickr']['original'])
+    if not spacex_links:
+        raise Exception('Отсутствуют картинки в данном запуске')
     for spacex_number, spacex in enumerate(spacex_links):
         filename = os.path.join('images', f'spacex_{spacex_number}.jpg')
         download_space_image.download_image(spacex, filename)
@@ -29,6 +28,6 @@ if __name__ == "__main__":
         help='ID запуска SpaceX',
         default='latest'
     )
-    args = parser.parse_args()
+    launch_id = lambda: parser.parse_args().launch_id
     Path("images").mkdir(parents=True, exist_ok=True)
     fetch_spacex_last_launch()
