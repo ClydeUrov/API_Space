@@ -1,8 +1,8 @@
 import os
 import requests
+import urllib.parse
 from pathlib import Path
 from os.path import splitext
-import urllib.parse
 from dotenv import load_dotenv
 from datetime import datetime
 import download_space_image
@@ -22,11 +22,7 @@ def fetch_nasas_images(token):
          params=params
     )
     response.raise_for_status()
-    nasa_images = response.json()
-    images_url = []
-    for part in nasa_images:
-        if part['media_type'] == 'image':
-            images_url.append(part['url'])
+    images_url = [part['url'] for part in response.json() if part['media_type'] == 'image']
     for nasa_apod_number, image in enumerate(images_url):
         filename = os.path.join(
             "images", f"nasa_apod_{nasa_apod_number}{image_expansion(image)}"
@@ -47,6 +43,6 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     date_time = datetime.strptime(args.date_time, "%y-%m-%d")
-    nasa_token = os.environ.get("NASA_TOKEN")
+    os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
     Path("images").mkdir(parents=True, exist_ok=True)
-    fetch_nasas_images(nasa_token)
+    fetch_nasas_images(os.environ.get("NASA_TOKEN"))
