@@ -15,8 +15,15 @@ def image_expansion(url):
     return splitext(extracted_link)[1]
 
 
-def fetch_nasas_images(token):
-    params = {'api_key': token, 'start_date': date_time.date()}
+def fetch_nasas_images():
+    redefine_nasa_env = input("Желаете ли переопределить NASA_TOKEN? ")
+    if redefine_nasa_env == "Yes" or redefine_nasa_env == "Да":
+        os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
+
+    params = {
+        'api_key': os.environ.get("NASA_TOKEN"),
+        'start_date': date_time.date()
+    }
     response = requests.get(
         'https://api.nasa.gov/planetary/apod',
          params=params
@@ -43,6 +50,5 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     date_time = datetime.strptime(args.date_time, "%y-%m-%d")
-    os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
     Path("images").mkdir(parents=True, exist_ok=True)
-    fetch_nasas_images(os.environ.get("NASA_TOKEN"))
+    fetch_nasas_images()
