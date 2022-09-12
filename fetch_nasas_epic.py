@@ -26,7 +26,7 @@ def fetch_nasa_epic(token):
     for nasa_epic_number, epic in enumerate(epics_url):
         filename = os.path.join('images', f'nasa_epic_{nasa_epic_number}.png')
         download_space_image.download_image(epic, filename)
-        
+
 
 if __name__ == '__main__':
     load_dotenv()
@@ -39,6 +39,8 @@ if __name__ == '__main__':
         type=int
     )
     photos_number = lambda: parser.parse_args().photos_number
-    os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
+    redefine_nasa_env = input("Желаете ли переопределить NASA_TOKEN? ")
+    if redefine_nasa_env == "Yes" or redefine_nasa_env == "Да":
+        os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
     Path("images").mkdir(parents=True, exist_ok=True)
     fetch_nasa_epic(os.environ.get('NASA_TOKEN'))
