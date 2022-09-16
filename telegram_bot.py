@@ -6,28 +6,22 @@ import argparse
 import time
 
 
-def publication_photo(all_images, bot, tg_chat_id):
+def publication_photo(all_images, token, chat_id, delay_time):
+	bot = telegram.Bot(token=token)
 	for image in all_images:
 		with open(os.path.join('images', image), 'rb') as file:
 			bot.send_document(
-				chat_id=tg_chat_id,
+				chat_id=chat_id,
 				document=file
 			)
-		time.sleep(args.delay_time)
+		time.sleep(delay_time)
 
 
-def main():
-	redefine_tg_env = input("Желаете ли переопределить TG_TOKEN и TG_CHAT_ID? ")
-	if redefine_tg_env == "Yes" or redefine_tg_env == "Да":
-		os.environ['TG_TOKEN'] = str(input('Введите ваш TG_TOKEN: '))
-		os.environ['TG_CHAT_ID'] = str(input('Введите ваш TG_CHAT_ID: '))
-
-	bot = telegram.Bot(token=os.environ.get("TG_TOKEN"))
-	tg_chat_id = os.environ.get("TG_CHAT_ID")
+def main(token, chat_id, delay_time):
 	all_images = [image for image in os.walk("images")][0][2]
 	while True:
 		try:
-			publication_photo(all_images, bot, tg_chat_id)
+			publication_photo(all_images, token, chat_id, delay_time)
 			random.shuffle(all_images)
 		except telegram.error.NetworkError:
 			time.sleep(10)
@@ -45,7 +39,21 @@ if __name__ == "__main__":
 		default=14400,
 		type=int
 	)
-	args = parser.parse_args()
-	main()
+	parser.add_argument(
+		'-t',
+		dest='tg_token',
+		help='Токен тегерам бота',
+		default=os.environ['TG_TOKEN']
+	)
+	parser.add_argument(
+		'-c',
+		dest='tg_chat_id',
+		help='Чат ID телеграм группы или бота',
+		default=os.environ['TG_CHAT_ID']
+	)
+	get_delay_time = lambda: parser.parse_args().delay_time
+	get_tg_token = lambda: parser.parse_args().tg_token
+	get_tg_chat_id = lambda: parser.parse_args().tg_chat_id
+	main(get_tg_token(), get_tg_chat_id(), get_delay_time())
 
 		
