@@ -1,6 +1,5 @@
 import os
 import requests
-from pathlib import Path
 import download_space_image
 import argparse
 
@@ -12,7 +11,7 @@ class EmptyListError(ValueError):
 def fetch_spacex_last_launch(launch):
     response = requests.get(f'https://api.spacexdata.com/v5/launches/{launch}')
     response.raise_for_status()
-    spacex_links = (response.json()['links']['flickr']['original'])
+    spacex_links = response.json()['links']['flickr']['original']
     if not spacex_links:
         raise EmptyListError('Отсутствуют картинки в данном запуске')
     for spacex_number, spacex in enumerate(spacex_links):
@@ -30,6 +29,5 @@ if __name__ == "__main__":
         help='ID запуска SpaceX',
         default='latest'
     )
-    launch_id = lambda: parser.parse_args().launch_id
-    Path("images").mkdir(parents=True, exist_ok=True)
-    fetch_spacex_last_launch(launch_id())
+    get_launch_id = lambda: parser.parse_args().launch_id
+    fetch_spacex_last_launch(get_launch_id())
