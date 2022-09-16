@@ -1,7 +1,6 @@
 import os
 import requests
 import urllib.parse
-from pathlib import Path
 from os.path import splitext
 from dotenv import load_dotenv
 from datetime import datetime
@@ -11,22 +10,15 @@ import argparse
 
 def image_expansion(url):
     url_parts = urllib.parse.urlparse(url)
-    extracted_link = f'{url_parts.path}'
+    extracted_link = url_parts.path
     return splitext(extracted_link)[1]
 
 
-def fetch_nasas_images():
-    redefine_nasa_env = input("Желаете ли переопределить NASA_TOKEN? ")
-    if redefine_nasa_env == "Yes" or redefine_nasa_env == "Да":
-        os.environ['NASA_TOKEN'] = str(input('Введите ваш NASA_TOKEN: '))
-
-    params = {
-        'api_key': os.environ.get("NASA_TOKEN"),
-        'start_date': date_time.date()
-    }
+def fetch_nasas_images(token):
+    params = {'api_key': token, 'start_date': date_time.date()}
     response = requests.get(
         'https://api.nasa.gov/planetary/apod',
-         params=params
+        params=params
     )
     response.raise_for_status()
     images_url = [part['url'] for part in response.json() if part['media_type'] == 'image']
@@ -48,7 +40,12 @@ if __name__ == '__main__':
         help='Дата начала выгрузки картинок. [year]-[month]-[day]',
         default='22-08-28'
     )
-    args = parser.parse_args()
-    date_time = datetime.strptime(args.date_time, "%y-%m-%d")
-    Path("images").mkdir(parents=True, exist_ok=True)
-    fetch_nasas_images()
+    parser.add_argument(
+        '-t',
+        dest='nasa_token',
+        help='NASA Токен',
+        default=os.environ['NASA_TOKEN']
+    )
+    date_time = datetime.strptime(parser.parse_args().date_time, "%y-%m-%d")
+    get_nasa_token = lambda: parser.parse_args().nasa_token
+    fetch_nasas_images(get_nasa_token())
