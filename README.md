@@ -24,7 +24,7 @@ TG_TOKEN='5770283337:AAEa868qn7PkD-vx4Dp75mmzPGxvtovcR1g'
 ```
 TG_CHAT_ID="@devman_space_images"
 ```
-Вносим его в файл `.env` для запуска програмы **telegram_bot.py**.
+Вносим их в файл `.env` для запуска програмы **telegram_bot.py**.
 
 ___
 Python3 должен быть уже установлен. 
@@ -46,18 +46,6 @@ Eсли программе не задавать начальный параме
 ```
 ..\API_Space>python3 telegram_bot.py -d 10
 ```
-*Ввести свой Телеграм Токен:*
-```
-..\API_Space>python3 telegram_bot.py -t 5770283337:AAEa868qn7PkD-vx4Dp75m
-```
-*Ввести свой Чат ID телеграм группы или бота:*
-```
-..\API_Space>python3 telegram_bot.py -c @devman_space_images
-```
-*Параметры могут задаваться совместно, поочерёдно вводя аргументы:*
-```
-..\API_Space>python3 telegram_bot.py -d 10 -t 5770283337:AAEa868qn7PkD -c @devman
-```
 
 Так же программа перехватывает ошибку `telegram.error.NetworkError` при сбоях в интернет-соединении и запускает код снова.
 ___
@@ -75,10 +63,6 @@ ___
 ```
 ..\API_Space>python3 fetch_nasas_epic.py -d 10 
 ```
-*Ввести NASA_TOKEN:*
-```
-..\API_Space>python3 fetch_nasas_epic.py -t mlafKIH1LG1N5BxRlz4lY1OWaEelQVgIvpVkygBB 
-```
 ___
 ##### Скачать картинки NASA APOD
 Загружает в папку ``\image`` картинки [NASA APOD](https://api.nasa.gov/) с сайта.
@@ -93,10 +77,6 @@ ___
 *Загрузить картинки с 22-08-05:*
 ```
 ..\API_Space>python3 fetch_spacex_images.py -d 22-08-05
-```
-*Ввести NASA_TOKEN:*
-```
-..\API_Space>python3 fetch_nasas_epic.py -t mlafKIH1LG1N5BxRlz4lY1OWaEelQVgIvpVkygBB 
 ```
 ___
 ##### Скачать картинки SpaceX
