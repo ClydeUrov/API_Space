@@ -10,10 +10,7 @@ def publication_photo(all_images, token, chat_id, delay_time):
 	bot = telegram.Bot(token=token)
 	for image in all_images:
 		with open(os.path.join('images', image), 'rb') as file:
-			bot.send_document(
-				chat_id=chat_id,
-				document=file
-			)
+			bot.send_document(chat_id=chat_id, document=file)
 		time.sleep(delay_time)
 
 
@@ -39,21 +36,9 @@ if __name__ == "__main__":
 		default=14400,
 		type=int
 	)
-	parser.add_argument(
-		'-t',
-		dest='tg_token',
-		help='Токен тегерам бота',
-		default=os.environ['TG_TOKEN']
-	)
-	parser.add_argument(
-		'-c',
-		dest='tg_chat_id',
-		help='Чат ID телеграм группы или бота',
-		default=os.environ['TG_CHAT_ID']
-	)
+	tg_chat_id = os.environ['TG_CHAT_ID']
+	tg_token = os.environ['TG_TOKEN']
 	get_delay_time = lambda: parser.parse_args().delay_time
-	get_tg_token = lambda: parser.parse_args().tg_token
-	get_tg_chat_id = lambda: parser.parse_args().tg_chat_id
-	main(get_tg_token(), get_tg_chat_id(), get_delay_time())
+	main(tg_token, tg_chat_id, get_delay_time())
 
 		

@@ -40,12 +40,6 @@ if __name__ == '__main__':
         help='Дата начала выгрузки картинок. [year]-[month]-[day]',
         default='22-08-28'
     )
-    parser.add_argument(
-        '-t',
-        dest='nasa_token',
-        help='NASA Токен',
-        default=os.environ['NASA_TOKEN']
-    )
+    nasa_token = os.environ['NASA_TOKEN']
     date_time = datetime.strptime(parser.parse_args().date_time, "%y-%m-%d")
-    get_nasa_token = lambda: parser.parse_args().nasa_token
-    fetch_nasas_images(get_nasa_token())
+    fetch_nasas_images(nasa_token)
