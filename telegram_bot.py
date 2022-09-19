@@ -36,9 +36,7 @@ if __name__ == "__main__":
 		default=14400,
 		type=int
 	)
-	tg_chat_id = os.environ['TG_CHAT_ID']
-	tg_token = os.environ['TG_TOKEN']
 	get_delay_time = lambda: parser.parse_args().delay_time
-	main(tg_token, tg_chat_id, get_delay_time())
+	main(os.environ['TG_TOKEN'], os.environ['TG_CHAT_ID'], get_delay_time())
 
 		

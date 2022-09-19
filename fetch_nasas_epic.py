@@ -37,6 +37,5 @@ if __name__ == '__main__':
         default='5',
         type=int
     )
-    nasa_token = os.environ['NASA_TOKEN']
     get_photos_number = lambda: parser.parse_args().photos_number
-    fetch_nasa_epic(nasa_token, get_photos_number())
+    fetch_nasa_epic(os.environ['NASA_TOKEN'], get_photos_number())
