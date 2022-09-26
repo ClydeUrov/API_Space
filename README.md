@@ -11,7 +11,7 @@
 ```
 NASA_TOKEN='mlafKIH1LG1N5BxRlz4lY1OWaEelQVgIvpVkygBB'
 ```
-Вносим его в файл `.env` для запуска программ **fetch_nasas_images.py** и **fetch_nasas_epic.py**.
+Вносим его в файл `.env` для запуска программ **fetch_nasa_apod_images.py** и **fetch_nasa_epic_images.py**.
 ___
 Для загрузки картинок на телеграмм канал необходим TG_TOKEN и TG_CHAT_ID.
 Получаем TG_TOKEN в телеграмме у *@BotFather*.
@@ -57,11 +57,11 @@ ___
 Пример ввода:
 *Скачать 5 картинок:*
 ```
-..\API_Space>python3 fetch_nasas_epic.py
+..\API_Space>python3 fetch_nasa_epic_images.py
 ```
 *Скачать 10 картинок:*
 ```
-..\API_Space>python3 fetch_nasas_epic.py -d 10 
+..\API_Space>python3 fetch_nasa_epic_images.py -d 10 
 ```
 ___
 ##### Скачать картинки NASA APOD
@@ -71,12 +71,12 @@ ___
 Пример ввода:
 *Загрузить картинки с 22-08-28:*
 ```
-..\API_Space>python3 fetch_nasas_images.py
+..\API_Space>python3 fetch_nasa_apod_images.py
 ```
 Для указания другой даты скачивания вводим в формате [year]-[month]-[day].
 *Загрузить картинки с 22-08-05:*
 ```
-..\API_Space>python3 fetch_spacex_images.py -d 22-08-05
+..\API_Space>python3 fetch_nasa_apod_images.py -d 22-08-05
 ```
 ___
 ##### Скачать картинки SpaceX
