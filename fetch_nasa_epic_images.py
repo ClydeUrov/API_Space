@@ -17,7 +17,7 @@ def fetch_nasa_json(token):
     return response.json()
 
 
-def fetch_nasa_url(token, photos_number, json):
+def fetch_nasa_urls(token, photos_number, json):
     urls = []
     for number in range(photos_number):
         name = json[number]["image"]
@@ -32,7 +32,7 @@ def fetch_nasa_url(token, photos_number, json):
     return urls
 
 
-def download_image(urls):
+def download_images(urls):
     for number, epic in enumerate(urls):
         filename = os.path.join("images", f"nasa_epic_{number}.png")
         download_space_image.download_image(epic, filename)
@@ -52,5 +52,5 @@ if __name__ == "__main__":
     )
     get_photos_number = lambda: parser.parse_args().photos_number
     json = fetch_nasa_json(os.environ["NASA_TOKEN"])
-    urls = fetch_nasa_url(os.environ["NASA_TOKEN"], get_photos_number(), json)
+    urls = fetch_nasa_urls(os.environ["NASA_TOKEN"], get_photos_number(), json)
     download_image(urls)
