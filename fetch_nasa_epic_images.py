@@ -53,4 +53,4 @@ if __name__ == "__main__":
     get_photos_number = lambda: parser.parse_args().photos_number
     json = fetch_nasa_json(os.environ["NASA_TOKEN"])
     urls = fetch_nasa_urls(os.environ["NASA_TOKEN"], get_photos_number(), json)
-    download_image(urls)
+    download_images(urls)
